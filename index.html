@@ -273,6 +273,29 @@
   @keyframes pulseGo{0%,100%{opacity:.6;}50%{opacity:1;}}
   #start.hide{opacity:0; pointer-events:none;}
 
+  /* it's a match screen */
+  #match{position:absolute; inset:0; z-index:19; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:26px;
+    background:radial-gradient(120% 90% at 50% 34%, #ff6f93, #d1275a 58%, #7a0f36 100%);
+    opacity:0; pointer-events:none; transition:opacity .7s ease;}
+  #match.on{opacity:1;}
+  #match .mtitle{color:#fff; font-size:36px; font-weight:800; letter-spacing:.5px;
+    text-shadow:0 2px 24px rgba(0,0,0,.28); opacity:0; transform:scale(.82);}
+  #match.on .mtitle{animation:mpop .7s .1s cubic-bezier(.2,1.3,.4,1) forwards;}
+  @keyframes mpop{to{opacity:1; transform:scale(1);}}
+  #match .mavas{display:flex; align-items:center;}
+  #match .mava{width:98px;height:98px;border-radius:50%; display:flex;align-items:center;justify-content:center;
+    font-size:46px; border:3px solid #fff; box-shadow:0 10px 34px rgba(0,0,0,.32);}
+  #match .mava.her{background:linear-gradient(135deg,#a24bd6,#6a2fb0); margin-right:-16px; opacity:0; transform:translateX(-46px);}
+  #match .mava.him{background:linear-gradient(135deg,#33333a,#0d0d0d); margin-left:-16px; opacity:0; transform:translateX(46px);}
+  #match.on .mava.her{animation:mslL .7s .35s ease forwards;}
+  #match.on .mava.him{animation:mslR .7s .35s ease forwards;}
+  @keyframes mslL{to{opacity:1; transform:translateX(0);}}
+  @keyframes mslR{to{opacity:1; transform:translateX(0);}}
+  #match .msub{color:#ffdfe9; font-size:14px; letter-spacing:.6px; opacity:0;}
+  #match.on .msub{animation:mfade .6s 1.05s ease forwards;}
+  @keyframes mfade{to{opacity:1;}}
+
   body.act3 #thread{animation:glitchY 7s infinite;}
   @keyframes glitchY{0%,97%,100%{transform:translateX(0);}97.5%{transform:translateX(1px);}98.5%{transform:translateX(-1px);}}
 
@@ -333,6 +356,15 @@
       <div class="note">you deleted this conversation</div>
       <h1>three reasons</h1>
       <div id="replay">play again</div>
+    </div>
+
+    <div id="match">
+      <div class="mtitle">it's a match</div>
+      <div class="mavas">
+        <div class="mava her">💜</div>
+        <div class="mava him">🖤</div>
+      </div>
+      <div class="msub">you and him liked each other</div>
     </div>
 
     <div id="start">
@@ -1148,7 +1180,10 @@ async function finale(){
 $('#start').addEventListener('click', function once(){
   $('#start').classList.add('hide');
   try{ navigator.vibrate && navigator.vibrate(20);}catch(e){}
-  setTimeout(run, 700);
+  const m=$('#match');
+  setTimeout(()=>{ m.classList.add('on'); }, 450);
+  setTimeout(()=>{ m.classList.remove('on'); }, 3500);
+  setTimeout(run, 4300);
   $('#start').removeEventListener('click', once);
 }, {once:true});
 

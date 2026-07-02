@@ -69,8 +69,9 @@
   body.pal-graysad #phone{ --bg:#d0d2d6; --him-bg:#c4c7cd; --him-tx:#2b2d31; --me-bg:#7c828d; --me-tx:#f2f3f5; --friend-bg:#c4c7cd; --friend-tx:#2b2d31; --head-bg:#d7d9dc; --head-tx:#3a3d42; --sub-tx:#888c92; --accent:#7c828d; --input-bg:#e3e4e7; --input-tx:#2b2d31; --ph-tx:#9a9da3; --pill-bg:#c8cace; --pill-tx:#888c92; --stamp-tx:#9a9da3; }
 
   /* ---- per-person identity: Him = blue, Friend = green ---- */
-  #phone.who-him{ --identity:#3f74d6; }
+  #phone.who-him{ --identity:#161616; }
   #phone.who-friend{ --identity:#12a06a; }
+  body.pal-endgray #phone{ --bg:#25262a; --him-bg:#34373c; --him-tx:#dcdce0; --me-bg:#4a4d53; --me-tx:#ececed; --friend-bg:#34373c; --friend-tx:#dcdce0; --head-bg:#202124; --head-tx:#d8d8dc; --sub-tx:#8a8d93; --accent:#5a5d63; --input-bg:#2a2b2f; --input-tx:#dcdce0; --ph-tx:#7a7d83; --pill-bg:#2f3033; --pill-tx:#8a8d93; --stamp-tx:#8a8d93; }
 
   /* status bar */
   #statusbar{
@@ -242,11 +243,11 @@
 
   /* ghost / flicker overlay */
   #ghosts{position:absolute; inset:34px 0 0 0; z-index:4; pointer-events:none; overflow:hidden;}
-  .ghost{position:absolute; left:50%; transform:translateX(-50%);
-    font-size:15.5px; color:#fff; opacity:0; white-space:nowrap; max-width:90%; overflow:hidden; text-overflow:ellipsis;
-    padding:8px 12px; border-radius:16px; background:rgba(120,60,180,.18);}
-  .ghost.flick{animation:flick .9s ease forwards;}
-  @keyframes flick{0%{opacity:0;}20%{opacity:.85;}80%{opacity:.6;}100%{opacity:0;}}
+  .ghost{position:absolute; left:50%; transform:translate(-50%,0);
+    font-size:17.5px; color:#fff; opacity:0; white-space:normal; max-width:80%; text-align:center; line-height:1.35;
+    padding:11px 18px; border-radius:16px; background:rgba(80,14,22,.55); box-shadow:0 0 26px rgba(0,0,0,.55);}
+  .ghost.flick{animation:flick 1.7s ease forwards;}
+  @keyframes flick{0%{opacity:0; transform:translate(-50%,10px);}16%{opacity:1; transform:translate(-50%,0);}82%{opacity:1; transform:translate(-50%,0);}100%{opacity:0; transform:translate(-50%,-10px);}}
 
   #crack{position:absolute; inset:0; z-index:9; opacity:0; pointer-events:none; transition:opacity 1.4s;}
   #crack.on{opacity:.85;}
@@ -385,7 +386,15 @@ function fl(who,text){
 }
 const blur=(amount,ms=0)=>S.push({type:'blur', amount, ms});
 const palette=(name,ms=0)=>S.push({type:'palette', name, ms});
-const F = (sub='online')=>head('Friend','theme-friend',sub,'🫂');
+const bgstep=(c)=>S.push({type:'bg', color:c});
+function lerpHex(a,b,t){const p=x=>[parseInt(x.slice(1,3),16),parseInt(x.slice(3,5),16),parseInt(x.slice(5,7),16)];const A=p(a),B=p(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('');}
+let dz={i:0,n:22};
+function dshade(){const t=dz.n>1?dz.i/(dz.n-1):0;dz.i++;return{bg:lerpHex('#5e0710','#060608',t),me:lerpHex('#e6101f','#4a0f16',t),him:lerpHex('#7c1220','#17171c',t),htx:lerpHex('#ffe0e0','#cfcfd6',t)};}
+const dme=(text,o={})=>{const s=dshade();bgstep(s.bg);me(text,{...o,bg:s.me,tx:'#ffffff'});};
+const dhim=(text,o={})=>{const s=dshade();bgstep(s.bg);him(text,{...o,bg:s.him,tx:s.htx});};
+const GP_ME={bg:'#96687a',tx:'#f4eef1'};
+const GP_HIM={bg:'#b7bcc8',tx:'#2b2d31'};
+const F = (sub='online')=>head('Friend','theme-friend',sub,'💚');
 
 /* ============================================================
    SUNDAY  -  three reasons, and the spell
@@ -529,7 +538,7 @@ clear();
 /* ============================================================
    MONDAY  -  one glass of wine, and rain
    ============================================================ */
-head('Him','','last seen 09:41','🌀');
+head('Him','','last seen 09:41','🖤');
 div('Monday');
 me("so youre free today right 👀", {t:'12:48'});
 him("gloriously free. nowhere to be", {t:'12:50'});
@@ -556,7 +565,7 @@ pause(900);
 clear();
 
 /* Monday: the rain */
-head('Him','','last seen 13:18','🌀');
+head('Him','','last seen 13:18','🖤');
 scene('rain');
 him("might be a little late, the rain has murdered the roads", {t:'16:39'});
 me("its fine. im getting soaked either way 🙃", {t:'16:52'});
@@ -581,7 +590,7 @@ pause(900);
 clear();
 
 /* Monday night: him, softer */
-head('Him','','online','🌀');
+head('Him','','online','🖤');
 me("wish id kissed you longer", {t:'20:41'});
 typing(1400);
 him("then come back and fix it", {t:'21:04'});
@@ -612,7 +621,7 @@ fr("go. carefully. have the whole thing", {t:'18:26'});
 pause(900);
 clear();
 
-head('Him','','online','🌀');
+head('Him','','online','🖤');
 me("so. tonight. the coast?", {t:'18:04'});
 him("i genuinely cannot wait that long but ill survive", {t:'18:14'});
 me("ill meet you where the road bends", {t:'19:11'});
@@ -654,7 +663,7 @@ pause(900);
 clear();
 
 /* Wednesday: him, the admission */
-head('Him','','online','🌀');
+head('Him','','online','🖤');
 me("im going to end up with a real crush on you if we keep this up", {t:'09:18'});
 me("if thats allowed 🙈", {t:'09:18'});
 typing(1500);
@@ -695,7 +704,7 @@ fr("glad you found someone running at your speed for once", {t:'12:31'});
 pause(800);
 clear();
 
-head('Him','','online','🌀');
+head('Him','','online','🖤');
 me("what time are you stealing me tonight", {t:'15:06'});
 him("after dinner. ill come to you", {t:'15:42'});
 me("i made an effort. youre contractually required to notice", {t:'20:26'});
@@ -730,80 +739,82 @@ pause(1100);
 clear();
 
 /* Friday: the ask, to him */
-head('Him','','last seen 11:02','🌀');
-me("thank you for driving me home. it really mattered", {t:'11:14'});
-him("of course. it was the right thing to do", {t:'12:28'});
-me("and thank you for the rest of it too 🙃", {t:'12:40'});
+head('Him','','last seen 11:02','🖤');
+me("thank you for driving me home. it really mattered", {t:'11:14', ...GP_ME});
+him("of course. it was the right thing to do", {t:'12:28', ...GP_HIM});
+me("and thank you for the rest of it too 🙃", {t:'12:40', ...GP_ME});
 pause(1000);
 draft("so are we doing this again or");
 draft("i had the best week i dont want to make it weird");
-me("would you want to see me again?", {t:'12:41', live:true});
-me("maybe without the sleepovers for a bit though 🥹", {t:'12:42', live:true});
+me("would you want to see me again?", {t:'12:41', live:true, ...GP_ME});
+me("maybe without the sleepovers for a bit though 🥹", {t:'12:42', live:true, ...GP_ME});
 
 /* the wait */
-me("...", {t:'14:02', tiny:true});
+me("...", {t:'14:02', tiny:true, ...GP_ME});
 tjump(['14:06','14:48','15:21','15:50','16:09']);
 typing(2400);
 pause(900);
 typing(1500);
-him("hey. sorry. i was completely asleep for hours", {t:'16:25'});
+him("hey. sorry. i was completely asleep for hours", {t:'16:25', ...GP_HIM});
 pause(1600);
-him("i really do appreciate you asking", {t:'16:25'});
+him("i really do appreciate you asking", {t:'16:25', ...GP_HIM});
 pause(1500);
+/* the rejection: red lands here, then darkens with every message */
 palette('superred');
-him("i just dont feel the romantic part of it", {t:'16:26'});
+dhim("i just dont feel the romantic part of it", {t:'16:26'});
 pause(1600);
-him("and i dont want to lead you on", {t:'16:26', glitch:true});
+dhim("and i dont want to lead you on", {t:'16:26', glitch:true});
 pause(2600);
 
-/* the raw fallout */
+/* the raw fallout, darkening with each message */
 draft("oh");
 draft("right. yeah. totally");
-me("thank you for being honest", {t:'16:34', live:true});
+dme("thank you for being honest", {t:'16:34', live:true});
 pause(1000);
-me("can i ask one thing so i stop inventing reasons. was it only ever the chemistry, or did something change once we met", {t:'16:45', live:true});
+dme("can i ask one thing so i stop inventing reasons. was it only ever the chemistry, or did something change once we met", {t:'16:45', live:true});
 typing(1800);
-him("no, im actually looking for something real", {t:'16:53'});
-him("nothing changed. i think this is just how it goes sometimes 🤔", {t:'16:56', glitch:true});
+dhim("no, im actually looking for something real", {t:'16:53'});
+dhim("nothing changed. i think this is just how it goes sometimes 🤔", {t:'16:56', glitch:true});
 pause(2200);
-me("maybe its a me thing", {t:'17:16', live:true});
+dme("maybe its a me thing", {t:'17:16', live:true});
 pause(700);
-me("but now that its over i just feel a little played", {t:'17:16', live:true});
+dme("but now that its over i just feel a little played", {t:'17:16', live:true});
 pause(1500);
-me("it makes me sad. i felt something i hadnt felt in a long time", {t:'17:19', live:true});
+dme("it makes me sad. i felt something i hadnt felt in a long time", {t:'17:19', live:true});
 typing(2200);
 pause(1400);
-him("im really sorry it landed like that", {t:'17:44'});
-him("i never meant to play you. it honestly surprises me that it feels that way", {t:'17:44'});
+dhim("im really sorry it landed like that", {t:'17:44'});
+dhim("i never meant to play you. it honestly surprises me that it feels that way", {t:'17:44'});
 pause(2000);
 draft("but it does");
 draft("i feel so stupid for how much i liked you");
-me("i just wish id known none of it meant anything before we slept together", {t:'17:50', live:true});
+dme("i just wish id known none of it meant anything before we slept together", {t:'17:50', live:true});
 pause(800);
-me("so it couldve been my choice too", {t:'17:50', live:true});
+dme("so it couldve been my choice too", {t:'17:50', live:true});
 typing(1300);
 pause(1100);
-me("im going to stop here. its already too much", {t:'17:57', live:true});
+dme("im going to stop here. its already too much", {t:'17:57', live:true});
 typing(1500);
-him("it wasnt supposed to mean nothing", {t:'18:06'});
-him("im sorry i made it feel that way", {t:'18:06'});
+dhim("it wasnt supposed to mean nothing", {t:'18:06'});
+dhim("im sorry i made it feel that way", {t:'18:06'});
 pause(1300);
 palette('black');
-me("how could it not. you just said you never felt it", {t:'18:09', live:true});
+dme("how could it not. you just said you never felt it", {t:'18:09', live:true});
 typing(1300);
-him("i didnt say never", {t:'18:11'});
-me("then what changed", {t:'18:11', live:true, tiny:true});
+dhim("i didnt say never", {t:'18:11'});
+dme("then what changed", {t:'18:11', live:true});
 typing(2600);
 pause(1400);
-him("nothing changed", {t:'18:14'});
-him("i liked you from the start and wanted to see where it went", {t:'18:14'});
-him("it just didnt land where you wanted it to. thats all", {t:'18:14', glitch:true});
+dhim("nothing changed", {t:'18:14'});
+dhim("i liked you from the start and wanted to see where it went", {t:'18:14'});
+dhim("it just didnt land where you wanted it to. thats all", {t:'18:14', glitch:true});
 pause(3000);
 clear();
 
 /* ============================================================
-   FRIDAY night  -  the friend, the kindest voice
+   FRIDAY night  -  the friend, the kindest voice (grey)
    ============================================================ */
+palette('endgray');
 F('online');
 me("💔", {t:'16:27', tiny:true});
 me("ill be fine. right now i just want to lie on the floor for a while", {t:'16:36'});
@@ -852,10 +863,12 @@ function setHeader(name,theme,sub,ava){
   phone.classList.add(theme==='theme-friend'?'who-friend':'who-him');
 }
 
-function addBubble(side, text, {stamp, cls='', tiny=false, glitch=false}={}){
+function addBubble(side, text, {stamp, cls='', tiny=false, glitch=false, bg=null, tx=null}={}){
   const row = rowEl(side+(cls?' '+cls:''));
   const b = document.createElement('div'); b.className='bub pop';
   if(tiny){ b.style.fontSize='13px'; b.style.opacity='.85'; }
+  if(bg){ b.style.background=bg; }
+  if(tx){ b.style.color=tx; }
   b.textContent = text;
   if(glitch) b.dataset.glitch='1';
   row.appendChild(b);
@@ -943,7 +956,7 @@ async function flashFragments(list){
   await wait(240);
 }
 
-function clearThread(){ thread.innerHTML=''; thread.style.filter='none'; resetField(); setScene('none'); }
+function clearThread(){ thread.innerHTML=''; thread.style.filter='none'; document.getElementById('phone').style.background=''; resetField(); setScene('none'); }
 
 async function step(s){
   switch(s.type){
@@ -955,7 +968,7 @@ async function step(s){
     }
     case 'me':{
       if(s.live && !s.instant){ await typeInField(s.text); await wait(320); resetField(); }
-      addBubble('me', s.text, {stamp:s.t, tiny:s.tiny});
+      addBubble('me', s.text, {stamp:s.t, tiny:s.tiny, bg:s.bg, tx:s.tx});
       try{ navigator.vibrate && navigator.vibrate(8);}catch(e){}
       await wait(s.gap!=null?s.gap:(s.instant?230:640));
       break;
@@ -963,7 +976,7 @@ async function step(s){
     case 'left':{
       const cls = s.who==='friend'?'friend':'';
       if(!s.instant){ await showTyping(Math.min(2400, 640 + s.text.length*22), s.who); }
-      addBubble('left', s.text, {stamp:s.t, cls, glitch:s.glitch});
+      addBubble('left', s.text, {stamp:s.t, cls, glitch:s.glitch, bg:s.bg, tx:s.tx});
       try{ navigator.vibrate && navigator.vibrate(14);}catch(e){}
       await wait(s.gap!=null?s.gap:(s.instant?230:800));
       break;
@@ -980,6 +993,7 @@ async function step(s){
     case 'fragments': await flashFragments(s.list); break;
     case 'blur': thread.style.transition='filter .7s ease'; thread.style.filter = s.amount? ('blur('+s.amount+'px)') : 'none'; await wait(s.ms||0); break;
     case 'palette':{ [...document.body.classList].forEach(c=>{ if(c.indexOf('pal-')===0) document.body.classList.remove(c); }); if(s.name) document.body.classList.add('pal-'+s.name); await wait(s.ms||0); break; }
+    case 'bg':{ const ph=document.getElementById('phone'); ph.style.transition='background .9s ease'; ph.style.background=s.color||''; await wait(s.ms||0); break; }
     case 'doodle': spawnDoodles(s.list); break;
     case 'finale': await finale(); break;
   }
@@ -1058,8 +1072,9 @@ async function deleteDialogue(){
 async function finale(){
   [...document.body.classList].forEach(c=>{ if(c.indexOf('pal-')===0) document.body.classList.remove(c); });
   document.body.classList.add('pal-black');
+  document.getElementById('phone').style.background='';
   resetField();
-  setHeader('Him','','last seen 18:14','🌀');
+  setHeader('Him','','last seen 18:14','🖤');
   injectRecap();
   await wait(700);
   document.body.classList.add('bleeding');
@@ -1085,7 +1100,10 @@ async function finale(){
   document.querySelector('#field .blood-fill').style.width='100%';
   await wait(1400);
   bleedFrom($('#send'), 220);
-  await wait(800);
+  // blood from every single message
+  const allBubs=[...thread.querySelectorAll('.bub')];
+  for(let i=0;i<allBubs.length;i++){ if(dead) return; bleedFrom(allBubs[i], 26+Math.random()*140); if(i%2) await wait(85); }
+  await wait(1000);
 
   const ghosts=[
     "youd never once be bored of me",
@@ -1103,9 +1121,9 @@ async function finale(){
   for(let i=0;i<ghosts.length;i++){
     if(dead) return;
     const g=document.createElement('div'); g.className='ghost flick'; g.textContent=ghosts[i];
-    g.style.top=(12+(i*8)%74)+'%';
-    gl.appendChild(g); setTimeout(()=>g.remove(),900);
-    await wait(380);
+    g.style.top='44%';
+    gl.appendChild(g); setTimeout(()=>g.remove(),1700);
+    await wait(1550);
   }
   await wait(600);
   $('#crack').classList.add('on');

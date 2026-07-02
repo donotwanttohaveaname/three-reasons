@@ -66,6 +66,11 @@
   body.pal-graypink #phone{ --bg:#d6cad0; --him-bg:#c9bcc4; --him-tx:#2c2228; --me-bg:#96687a; --me-tx:#f4eef1; --friend-bg:#c9bcc4; --friend-tx:#2c2228; --head-bg:#dcd0d6; --head-tx:#3a2e34; --sub-tx:#8a7a82; --accent:#96687a; --input-bg:#e5dce1; --input-tx:#2c2228; --ph-tx:#9a8a92; --pill-bg:#cabdc4; --pill-tx:#8a7a82; --stamp-tx:#9a8a92; }
   body.pal-superred #phone{ --bg:#5e0710; --him-bg:#3f0810; --him-tx:#ffdede; --me-bg:#e6101f; --me-tx:#fff; --friend-bg:#3f0810; --friend-tx:#ffdede; --head-bg:#4a0810; --head-tx:#ffd6d6; --sub-tx:#c97a7a; --accent:#ff2534; --input-bg:#2e0a0e; --input-tx:#ffdede; --ph-tx:#a55; --pill-bg:#4a0c12; --pill-tx:#cc8a8a; --stamp-tx:#cc7a7a; }
   body.pal-black #phone{ --bg:#060607; --him-bg:#1c1c20; --him-tx:#e9e9ef; --me-bg:#6a1526; --me-tx:#fff; --friend-bg:#16403a; --friend-tx:#dfeeea; --head-bg:#0f0f12; --head-tx:#f0f0f3; --sub-tx:#7a7a82; --accent:#7a1020; --input-bg:#141014; --input-tx:#e9e9ef; --ph-tx:#5d5d66; --pill-bg:#1a1a1f; --pill-tx:#8a8a92; --stamp-tx:#8a8a95; }
+  body.pal-graysad #phone{ --bg:#d0d2d6; --him-bg:#c4c7cd; --him-tx:#2b2d31; --me-bg:#7c828d; --me-tx:#f2f3f5; --friend-bg:#c4c7cd; --friend-tx:#2b2d31; --head-bg:#d7d9dc; --head-tx:#3a3d42; --sub-tx:#888c92; --accent:#7c828d; --input-bg:#e3e4e7; --input-tx:#2b2d31; --ph-tx:#9a9da3; --pill-bg:#c8cace; --pill-tx:#888c92; --stamp-tx:#9a9da3; }
+
+  /* ---- per-person identity: Him = blue, Friend = green ---- */
+  #phone.who-him{ --identity:#3f74d6; }
+  #phone.who-friend{ --identity:#12a06a; }
 
   /* status bar */
   #statusbar{
@@ -85,7 +90,9 @@
   #header{
     flex:0 0 auto; z-index:5; position:relative;
     background:var(--head-bg);
-    border-bottom:1px solid rgba(128,128,128,.18);
+    background:color-mix(in srgb, var(--head-bg) 80%, var(--identity, transparent) 20%);
+    border-bottom:2px solid rgba(128,128,128,.25);
+    border-bottom:2px solid color-mix(in srgb, var(--identity, #888) 60%, transparent);
     padding:6px 14px 10px;
     display:flex; align-items:center; gap:11px;
     transition:background 1s ease, border-color 1s ease;
@@ -96,6 +103,8 @@
     background:linear-gradient(135deg,#3a3a44,#222);
     display:flex;align-items:center;justify-content:center;font-size:18px;
     flex:0 0 38px;
+    box-shadow:0 0 0 2px var(--identity, transparent);
+    transition:box-shadow 1s ease;
   }
   #header .meta{display:flex;flex-direction:column;line-height:1.15;min-width:0;}
   #header .name{font-size:16px;font-weight:600;color:var(--head-tx); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:color 1s ease;}
@@ -111,6 +120,7 @@
   #scene.on{opacity:1;}
   #scene .layer{position:absolute; inset:0; opacity:0; transition:opacity 1.4s ease;}
   #scene .layer.show{opacity:.4;}
+  #scene .sc-road.show, #scene .sc-sea.show{opacity:.92;}
   .sc-rain{background:linear-gradient(180deg, rgba(20,28,45,.55), rgba(8,10,18,.5));}
   .sc-rain::after{
     content:""; position:absolute; inset:-20%;
@@ -118,13 +128,24 @@
     animation:rain .5s linear infinite; opacity:.5;
   }
   @keyframes rain{from{transform:translateY(-40px);}to{transform:translateY(40px);}}
-  .sc-road{background:linear-gradient(180deg,#05060c 0%, #0b0d18 60%, #05060a 100%);}
-  .sc-road::after{content:"";position:absolute;left:50%;bottom:-10%;width:6px;height:120%;transform:translateX(-50%) perspective(120px) rotateX(46deg);
-    background:repeating-linear-gradient(#cfcf6a55 0 26px, transparent 26px 60px); animation:road 1.1s linear infinite;}
-  @keyframes road{to{background-position:0 86px;}}
-  .sc-sea{background:linear-gradient(180deg,#05060a 0%, #071019 55%, #0a1c24 100%);}
-  .sc-sea::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg, transparent 0 22px, rgba(70,130,150,.08) 22px 24px);animation:sea 4s ease-in-out infinite;}
-  @keyframes sea{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+  .sc-road{background:linear-gradient(180deg,#04050c 0%, #0a0c1a 55%, #06070f 100%);}
+  .sc-road::after{content:""; position:absolute; left:0; right:0; bottom:0; height:66%;
+    background:repeating-linear-gradient(to bottom, #e6c169 0 5%, transparent 5% 17%);
+    clip-path:polygon(48.5% 0, 51.5% 0, 70% 100%, 30% 100%);
+    animation:road .5s linear infinite;}
+  @keyframes road{from{background-position:0 0;}to{background-position:0 120px;}}
+  .sc-sea{background:linear-gradient(180deg,#04060e 0%, #08111f 50%, #0a1c2a 100%);}
+  .sc-sea::after{content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(1.6px 1.6px at 18% 15%, #fff, transparent 60%),
+      radial-gradient(1.6px 1.6px at 63% 9%, #fff, transparent 60%),
+      radial-gradient(1.6px 1.6px at 82% 20%, #dffbff, transparent 60%),
+      radial-gradient(1.6px 1.6px at 39% 7%, #fff, transparent 60%),
+      radial-gradient(1.6px 1.6px at 51% 23%, #fff, transparent 60%);}
+  .sc-sea::before{content:""; position:absolute; left:0; right:0; bottom:0; height:44%;
+    background:linear-gradient(180deg, transparent, rgba(120,170,200,.16));
+    animation:sea 3.5s ease-in-out infinite;}
+  @keyframes sea{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
 
   /* doodles */
   #doodles{position:absolute; inset:34px 0 0 0; z-index:1; pointer-events:none; overflow:hidden;}
@@ -156,8 +177,7 @@
     transition:background .9s ease, color .9s ease;
   }
   .me .bub{background:var(--me-bg); color:var(--me-tx); border-bottom-right-radius:6px;}
-  .left .bub{background:var(--him-bg); color:var(--him-tx); border-bottom-left-radius:6px;}
-  .left.friend .bub{background:var(--friend-bg); color:var(--friend-tx);}
+  .left .bub{background:var(--him-bg); background:color-mix(in srgb, var(--him-bg) 72%, var(--identity, #80808000) 28%); color:var(--him-tx); border-bottom-left-radius:6px;}
 
   .pop{animation:pop .32s cubic-bezier(.2,1.3,.4,1);}
   @keyframes pop{0%{transform:scale(.8); opacity:0;}60%{transform:scale(1.04);}100%{transform:scale(1); opacity:1;}}
@@ -398,7 +418,7 @@ me("keep going", {t:'22:56'});
 /* ---- the spell: a night that never ends ---- */
 pause(800);
 doodle(['✨','🌙','💜']);
-floodReset(430); ffloor(300); fdecay(0.985);
+floodReset(300); ffloor(140); fdecay(0.95);
 fl('him',"another one. snails can sleep for years at a time");
 fl('me',"honestly a life goal");
 fl('him',"the moon drifts a little further from us every single year");
@@ -414,7 +434,7 @@ fl('me',"are you paying rent");
 fl('him',"emotionally, constantly");
 fl('me',"fine, you can stay");
 div('Saturday');
-ffloor(66); fdecay(0.85); blur(0.7);
+ffloor(52); fdecay(0.8); blur(0.6);
 doodle(['🌙','💜']);
 fl('him',"we should start a tiny country, you and me");
 fl('me',"whats the one law");
@@ -422,7 +442,7 @@ fl('him',"no boring people allowed. compliments are the currency");
 fl('me',"then im already rich");
 fl('him',"filthy rich");
 fl('me',"say three more nice things and i legally become yours");
-blur(1.2);
+blur(1.0);
 fl('him',"greedy");
 fl('me',"yes. continue");
 fl('him',"youre the most fun ive found on here by a long way");
@@ -430,8 +450,20 @@ fl('me',"you say that to everyone?");
 fl('him',"no. most people never commit to the bit");
 fl('me',"weak");
 fl('him',"exactly. youre a different species");
+fl('me',"say something soft");
+fl('him',"youre warm");
+fl('me',"warmer");
+fl('him',"okay i actually really like you, is that allowed");
+fl('me',"only if i get to like you back");
+fl('him',"deal");
+fl('me',"do you ever actually sleep");
+fl('him',"not while youre still typing");
+fl('me',"dangerous");
+fl('him',"youre the dangerous one");
+fl('me',"we are both a menace");
+fl('him',"agreed");
 div('Sunday');
-ffloor(44); fdecay(0.9); blur(1.9);
+ffloor(40); fdecay(0.85); blur(1.6);
 doodle(['🚗','✨']);
 fl('him',"i want to put you in a car and drive nowhere for hours");
 fl('me',"thats slightly unsafe");
@@ -440,7 +472,7 @@ fl('him',"dark roads. bad music. no destination");
 fl('me',"my favourite kind of trouble");
 fl('him',"ive been trying to make my flat feel like an actual home lately");
 fl('me',"hows that going");
-blur(2.5);
+blur(2.1);
 fl('him',"slowly. mostly bare walls and good intentions");
 fl('me',"thats the whole trick though. the good intentions");
 fl('him',"see, this is the problem with you");
@@ -455,9 +487,19 @@ fl('him',"i should really sleep");
 fl('me',"same");
 fl('me',"so anyway");
 fl('him',"yeah exactly");
+fl('me',"tell me a secret");
+fl('him',"ive already told you too many");
+fl('me',"tell me one more");
+fl('him',"im a little scared of how easy this is");
+fl('me',"me too");
+fl('me',"in a good way");
+fl('him',"in a good way");
+fl('me',"okay one more fact then i sleep");
+fl('him',"snails again?");
+fl('me',"no. you");
 
 div('Monday 01:16');
-ffloor(36); blur(3.2);
+ffloor(34); blur(2.6);
 fl('him',"i have to be awake in five hours and i hate it");
 fl('me',"awww");
 fl('him',"this is entirely your fault. youre too easy to talk to");
@@ -589,6 +631,7 @@ clear();
 F('online');
 div('Wednesday');
 me("last night was the sea and the whole sky and i think im in love 🌚", {t:'01:36'});
+palette('graysad');
 me("(the morning dread came back right on schedule though)", {t:'08:24'});
 me("good morning. i have a crush, a stomachache and a full anxiety spiral", {t:'08:59'});
 me("i wasnt supposed to catch feelings. how do i put them back", {t:'09:00'});
@@ -804,6 +847,9 @@ function setHeader(name,theme,sub,ava){
   hname.textContent = name;
   hsub.textContent = sub||'';
   hava.textContent = ava||'👤';
+  const phone=document.getElementById('phone');
+  phone.classList.remove('who-him','who-friend');
+  phone.classList.add(theme==='theme-friend'?'who-friend':'who-him');
 }
 
 function addBubble(side, text, {stamp, cls='', tiny=false, glitch=false}={}){

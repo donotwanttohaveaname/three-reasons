@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<title>three reasons</title>
+<meta name="robots" content="noindex, nofollow" />
+<style>
+  :root{
+    --bg:#070708;
+    --phone:#0c0c0f;
+    --header:#141418;
+    --hairline:#222227;
+    --me1:#7a34d6;
+    --me2:#5a23a8;
+    --him:#26262c;
+    --himtx:#e9e9ef;
+    --friend:#16604a;
+    --friendtx:#d8f3e9;
+    --muted:#84848f;
+    --pill:#1a1a1f;
+    --blood1:#5e0c16;
+    --blood2:#8c0d1c;
+    --blood3:#b3121f;
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%; margin:0;}
+  body{
+    background:
+      radial-gradient(120% 80% at 50% -10%, #161421 0%, #090909 55%, #050505 100%);
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    user-select:none;
+  }
+
+  /* ---------------- phone ---------------- */
+  #phone{
+    position:relative;
+    width:min(420px, 100vw);
+    height:min(900px, 100vh);
+    background:var(--phone);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+    box-shadow:0 0 0 1px #1d1d22, 0 30px 80px rgba(0,0,0,.6);
+  }
+  @media (min-width:440px){
+    #phone{border-radius:42px; height:min(880px,96vh); box-shadow:0 0 0 10px #000, 0 0 0 11px #2a2a30, 0 40px 120px rgba(0,0,0,.7);}
+  }
+
+  /* status bar */
+  #statusbar{
+    height:34px; flex:0 0 34px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 22px; font-size:13px; font-weight:600; letter-spacing:.3px;
+    color:#dcdce2; z-index:6; position:relative;
+  }
+  #clock{font-variant-numeric:tabular-nums;}
+  #statusbar .right{display:flex; gap:6px; align-items:center; opacity:.85;}
+  #statusbar .bat{width:22px;height:11px;border:1px solid #cfcfd6;border-radius:3px;position:relative;}
+  #statusbar .bat::after{content:"";position:absolute;right:-3px;top:3px;width:2px;height:5px;background:#cfcfd6;border-radius:1px;}
+  #statusbar .bat i{position:absolute;left:1px;top:1px;bottom:1px;width:70%;background:#cfcfd6;border-radius:1px;display:block;}
+  body.dying #statusbar .bat i{width:14%; background:#b3121f;}
+
+  /* header */
+  #header{
+    flex:0 0 auto; z-index:5; position:relative;
+    background:linear-gradient(#16161b,#121216);
+    border-bottom:1px solid var(--hairline);
+    padding:6px 14px 10px;
+    display:flex; align-items:center; gap:11px;
+    transition:background .6s ease;
+  }
+  #header .back{color:#7b7bff; font-size:24px; line-height:1; width:14px;}
+  #header .ava{
+    width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(135deg,#3a3a44,#222);
+    display:flex;align-items:center;justify-content:center;font-size:18px;
+    flex:0 0 38px;
+  }
+  #header .meta{display:flex;flex-direction:column;line-height:1.15;min-width:0;}
+  #header .name{font-size:16px;font-weight:600;color:#f3f3f7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  #header .sub{font-size:11.5px;color:var(--muted); height:13px;}
+  #header .sub.typing-sub{color:#9a9aff;}
+  #header .dots-r{margin-left:auto;color:#6a6a72;font-size:20px;letter-spacing:1px;}
+
+  header.theme-match{background:linear-gradient(#211320,#16101a);}
+  header.theme-match .ava{background:linear-gradient(135deg,#ff5a76,#b3236a);}
+  header.theme-friend .ava{background:linear-gradient(135deg,#1f8a68,#125a45);}
+
+  /* scene / weather layers */
+  #scene{position:absolute; inset:34px 0 0 0; z-index:1; pointer-events:none; opacity:0; transition:opacity 1.2s ease;}
+  #scene.on{opacity:1;}
+  #scene .layer{position:absolute; inset:0; opacity:0; transition:opacity 1.4s ease;}
+  #scene .layer.show{opacity:1;}
+  .sc-rain{background:linear-gradient(180deg, rgba(20,28,45,.55), rgba(8,10,18,.5));}
+  .sc-rain::after{
+    content:""; position:absolute; inset:-20%;
+    background-image:repeating-linear-gradient(102deg, rgba(150,170,210,.16) 0 1px, transparent 1px 9px);
+    animation:rain .5s linear infinite; opacity:.5;
+  }
+  @keyframes rain{from{transform:translateY(-40px);}to{transform:translateY(40px);}}
+  .sc-road{background:linear-gradient(180deg,#05060c 0%, #0b0d18 60%, #05060a 100%);}
+  .sc-road::after{content:"";position:absolute;left:50%;bottom:-10%;width:6px;height:120%;transform:translateX(-50%) perspective(120px) rotateX(46deg);
+    background:repeating-linear-gradient(#cfcf6a55 0 26px, transparent 26px 60px); animation:road 1.1s linear infinite;}
+  @keyframes road{to{background-position:0 86px;}}
+  .sc-sea{background:linear-gradient(180deg,#05060a 0%, #071019 55%, #0a1c24 100%);}
+  .sc-sea::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg, transparent 0 22px, rgba(70,130,150,.08) 22px 24px);animation:sea 4s ease-in-out infinite;}
+  @keyframes sea{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+  /* doodles */
+  #doodles{position:absolute; inset:34px 0 0 0; z-index:1; pointer-events:none; overflow:hidden;}
+  .doodle{position:absolute; font-size:26px; opacity:0; filter:grayscale(.2); animation:floatUp linear forwards;}
+  @keyframes floatUp{0%{opacity:0; transform:translateY(20px) rotate(0);}15%{opacity:.20;}100%{opacity:0; transform:translateY(-120px) rotate(18deg);}}
+
+  /* messages */
+  #thread{
+    flex:1 1 auto; overflow-y:auto; overflow-x:hidden;
+    padding:14px 14px 6px; z-index:3; position:relative;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+  }
+  #thread::-webkit-scrollbar{display:none;}
+
+  .divider{display:flex; justify-content:center; margin:14px 0 10px;}
+  .divider span{background:var(--pill); color:#9a9aa2; font-size:11.5px; font-weight:600;
+    padding:4px 12px; border-radius:20px; letter-spacing:.3px;}
+
+  .row{display:flex; margin:2px 0; animation:rise .26s cubic-bezier(.2,.8,.2,1);}
+  .row.me{justify-content:flex-end;}
+  .row.left{justify-content:flex-start;}
+  @keyframes rise{from{opacity:0; transform:translateY(8px);}to{opacity:1; transform:translateY(0);}}
+
+  .bub{
+    max-width:78%; padding:8px 12px; border-radius:19px; font-size:15.5px; line-height:1.32;
+    word-wrap:break-word; white-space:pre-wrap; position:relative;
+    box-shadow:0 1px 1px rgba(0,0,0,.25);
+  }
+  .me .bub{background:linear-gradient(160deg,var(--me1),var(--me2)); color:#fff; border-bottom-right-radius:6px;}
+  .left .bub{background:var(--him); color:var(--himtx); border-bottom-left-radius:6px;}
+  .left.friend .bub{background:var(--friend); color:var(--friendtx);}
+
+  .pop{animation:pop .32s cubic-bezier(.2,1.3,.4,1);}
+  @keyframes pop{0%{transform:scale(.8); opacity:0;}60%{transform:scale(1.04);}100%{transform:scale(1); opacity:1;}}
+
+  .stamp{font-size:10.5px; color:#5f5f68; margin:1px 7px 5px; }
+  .me .stamp{text-align:right;}
+  body.act3 .stamp{color:#8a8a95; font-size:11px;}
+  body.act3 .stamp.hot{color:#b06a6a;}
+
+  /* typing indicator bubble */
+  .typing .bub{display:inline-flex; gap:4px; align-items:center; padding:11px 14px;}
+  .typing .d{width:7px;height:7px;border-radius:50%; background:#9a9aa4; opacity:.5; animation:blink 1.2s infinite;}
+  .typing .d:nth-child(2){animation-delay:.2s;}
+  .typing .d:nth-child(3){animation-delay:.4s;}
+  @keyframes blink{0%,60%,100%{opacity:.3; transform:translateY(0);}30%{opacity:1; transform:translateY(-3px);}}
+  body.act3 .typing .bub{animation:heartbeat 1s ease-in-out infinite;}
+  @keyframes heartbeat{0%,100%{transform:scale(1);}14%{transform:scale(1.12);}28%{transform:scale(1);}42%{transform:scale(1.08);}}
+
+  /* input bar */
+  #inputbar{
+    flex:0 0 auto; z-index:5; position:relative;
+    border-top:1px solid var(--hairline);
+    background:#101015;
+    padding:9px 12px calc(11px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; gap:9px;
+    transition:background .8s ease;
+  }
+  #field{
+    flex:1 1 auto; min-height:38px; max-height:96px; overflow:hidden;
+    background:#1d1d23; border-radius:20px; padding:9px 14px;
+    font-size:15.5px; color:#e9e9ef; line-height:1.3;
+    display:flex; align-items:center;
+    position:relative;
+    transition:background .8s ease, box-shadow .8s ease;
+  }
+  #field .ph{color:#5d5d66;}
+  #field .cur{display:inline-block; width:2px; height:18px; background:#7b7bff; margin-left:1px; animation:caret 1s steps(1) infinite; vertical-align:middle;}
+  @keyframes caret{50%{opacity:0;}}
+  #send{
+    flex:0 0 36px; width:36px;height:36px;border-radius:50%;
+    background:linear-gradient(160deg,var(--me1),var(--me2));
+    display:flex;align-items:center;justify-content:center;
+    transition:filter .6s, box-shadow .6s;
+  }
+  #send svg{width:18px;height:18px;fill:#fff;}
+
+  /* ---- bleeding state ---- */
+  body.bleeding #send{box-shadow:0 0 16px 2px #b3121f, 0 0 4px #ff2a3a; filter:saturate(1.3);}
+  body.bleeding #inputbar{background:#160a0c;}
+  #field .blood-fill{position:absolute; inset:0; border-radius:20px;
+    background:linear-gradient(90deg,var(--blood2),var(--blood1) 60%, transparent);
+    width:0%; transition:width 2.6s ease; opacity:.92;}
+  body.bleeding #field{box-shadow:inset 0 0 18px rgba(140,13,28,.5);}
+
+  .tear{position:absolute; width:3px; border-radius:3px; top:0; height:0;
+    background:linear-gradient(#b3121f,#5e0c16); z-index:30; pointer-events:none;
+    box-shadow:0 0 6px #8c0d1c; opacity:.95;}
+  .tear.run{animation:tear var(--td,2.4s) ease-in forwards;}
+  @keyframes tear{0%{height:0;}100%{height:var(--th,200px);}}
+  .tear .drop{position:absolute; bottom:-3px; left:-2px; width:7px;height:7px;border-radius:50%;
+    background:#b3121f; box-shadow:0 0 6px #b3121f;}
+
+  /* ghost / flicker overlay */
+  #ghosts{position:absolute; inset:34px 0 0 0; z-index:4; pointer-events:none; overflow:hidden;}
+  .ghost{position:absolute; left:50%; transform:translateX(-50%);
+    font-size:15.5px; color:#fff; opacity:0; white-space:nowrap; max-width:90%; overflow:hidden; text-overflow:ellipsis;
+    padding:8px 12px; border-radius:16px; background:rgba(120,60,180,.18);}
+  .ghost.flick{animation:flick .9s ease forwards;}
+  @keyframes flick{0%{opacity:0;}20%{opacity:.85;}80%{opacity:.6;}100%{opacity:0;}}
+
+  #crack{position:absolute; inset:0; z-index:9; opacity:0; pointer-events:none; transition:opacity 1.4s;}
+  #crack.on{opacity:.85;}
+
+  /* end card */
+  #endcard{position:absolute; inset:0; z-index:12; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:22px; opacity:0; pointer-events:none;
+    transition:opacity 1.4s ease; background:#040405;}
+  #endcard.on{opacity:1; pointer-events:auto;}
+  #endcard .note{color:#6a6a72; font-size:13px; letter-spacing:.4px;}
+  #endcard h1{font-size:30px; font-weight:600; letter-spacing:1px; margin:0; color:#d8cde8; opacity:.9;}
+  #endcard #replay{margin-top:6px; color:#7a7a84; font-size:13px;
+    border:1px solid #2a2a30; padding:9px 22px; border-radius:22px; cursor:pointer; opacity:0; transition:opacity 1s;}
+  #endcard.show-replay #replay{opacity:1;}
+
+  /* start overlay */
+  #start{position:absolute; inset:0; z-index:20; background:radial-gradient(120% 90% at 50% 30%, #1a1426, #060608 70%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; cursor:pointer;
+    transition:opacity .8s ease;}
+  #start h1{font-size:34px; font-weight:600; letter-spacing:1px; margin:0; color:#efe7fb;}
+  #start .sub{color:#8a7ea0; font-size:13px; letter-spacing:3px; text-transform:uppercase;}
+  #start .go{margin-top:26px; color:#b9a9d8; font-size:13px; border:1px solid #3a2f4e; padding:10px 24px; border-radius:24px; animation:pulseGo 2s infinite;}
+  @keyframes pulseGo{0%,100%{opacity:.6;}50%{opacity:1;}}
+  #start.hide{opacity:0; pointer-events:none;}
+
+  body.act3 #thread{animation:glitchY 7s infinite;}
+  @keyframes glitchY{0%,97%,100%{transform:translateX(0);}97.5%{transform:translateX(1px);}98.5%{transform:translateX(-1px);}}
+
+  .vignette{position:absolute; inset:0; z-index:10; pointer-events:none;
+    box-shadow:inset 0 0 120px rgba(0,0,0,.55);}
+  body.bleeding .vignette{box-shadow:inset 0 0 130px rgba(90,8,16,.5), inset 0 0 60px rgba(0,0,0,.6);}
+</style>
+</head>
+<body>
+  <div id="phone">
+    <div id="statusbar">
+      <span id="clock">22:47</span>
+      <span class="right">
+        <span style="font-size:12px;">5G</span>
+        <span class="bat"><i></i></span>
+      </span>
+    </div>
+
+    <div id="header" class="theme-match">
+      <div class="back">‹</div>
+      <div class="ava">🔥</div>
+      <div class="meta">
+        <span class="name">new match</span>
+        <span class="sub" id="hsub"></span>
+      </div>
+      <div class="dots-r">⋯</div>
+    </div>
+
+    <div id="scene">
+      <div class="layer sc-rain" data-sc="rain"></div>
+      <div class="layer sc-road" data-sc="road"></div>
+      <div class="layer sc-sea" data-sc="sea"></div>
+    </div>
+    <div id="doodles"></div>
+
+    <div id="thread"></div>
+
+    <div id="ghosts"></div>
+    <svg id="crack" viewBox="0 0 420 880" preserveAspectRatio="none">
+      <g stroke="#b3121f" stroke-width="1.4" fill="none" opacity="0.9" filter="drop-shadow(0 0 2px #8c0d1c)">
+        <path d="M210 470 L198 510 L214 548 L196 600 L220 660 L205 720 L226 800"/>
+        <path d="M210 470 L240 500 L228 540 L262 580 L250 640"/>
+        <path d="M210 470 L182 498 L160 470 L120 500 L96 470"/>
+        <path d="M198 510 L150 520 L120 552"/>
+        <path d="M214 548 L268 542 L300 560"/>
+        <path d="M210 470 L214 430 L196 392 L214 350"/>
+      </g>
+    </svg>
+
+    <div class="vignette"></div>
+
+    <div id="inputbar">
+      <div id="field"><span class="ph">Message</span><span class="blood-fill"></span></div>
+      <div id="send"><svg viewBox="0 0 24 24"><path d="M3 11.5 21 3l-8.5 18-2.2-7.3z"/></svg></div>
+    </div>
+
+    <div id="endcard">
+      <div class="note">you deleted this conversation</div>
+      <h1>three reasons</h1>
+      <div id="replay">play again</div>
+    </div>
+
+    <div id="start">
+      <h1>three reasons</h1>
+      <div class="sub">one week</div>
+      <div class="go">tap to begin</div>
+    </div>
+  </div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const thread = $('#thread'), field = $('#field'), clock = $('#clock'),
+      header = $('#header'), hname = header.querySelector('.name'),
+      hsub = $('#hsub'), hava = header.querySelector('.ava'),
+      doodles = $('#doodles'), sceneWrap = $('#scene');
+
+let paused = false, dead = false;
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+async function wait(ms){
+  const end = Date.now()+ms;
+  while(Date.now()<end){ if(dead) throw 'dead'; await sleep(Math.min(60,end-Date.now())); while(paused){ await sleep(80);} }
+}
+const scrollDown = ()=>{ thread.scrollTop = thread.scrollHeight; };
+
+/* ---------- builders ---------- */
+const S = [];
+let floodGap = 300;
+const me   = (text,o={}) => S.push({type:'me', text, ...o});
+const him  = (text,o={}) => S.push({type:'left', who:'him', text, ...o});
+const fr   = (text,o={}) => S.push({type:'left', who:'friend', text, ...o});
+const pause= (ms)        => S.push({type:'pause', ms});
+const typing=(ms,who='him')=>S.push({type:'typing', ms, who});
+const head = (name,theme,sub='online',ava='👤')=>S.push({type:'header',name,theme,sub,ava});
+const div  = (label)     => S.push({type:'divider', label});
+const draft= (text,hold=1100)=>S.push({type:'draft', text, hold});
+const clear= ()          => S.push({type:'clear'});
+const scene= (name)      => S.push({type:'scene', name});
+const act  = (n)         => S.push({type:'act', n});
+const tjump= (times)     => S.push({type:'timejump', times});
+const fragFlash=(list)   => S.push({type:'fragments', list});
+const doodle=(list)      => S.push({type:'doodle', list});
+let floodFloor=210, floodDecay=0.975;
+function floodReset(g=300){ floodGap=g; }
+const ffloor=(n)=>{ floodFloor=n; };
+const fdecay=(n)=>{ floodDecay=n; };
+function fl(who,text){
+  const o={instant:true, gap:Math.round(floodGap)};
+  if(who==='me') me(text,o); else him(text,o);
+  floodGap = Math.max(floodFloor, floodGap*floodDecay);
+}
+const blur=(amount,ms=0)=>S.push({type:'blur', amount, ms});
+const F = (sub='online')=>head('Friend','theme-friend',sub,'🫂');
+
+/* ============================================================
+   SUNDAY  -  three reasons, and the spell
+   ============================================================ */
+head('new match','theme-match','you matched today','🔥');
+div('Friday');
+me("whats the three best reasons to date you", {t:'22:47', live:true});
+typing(1400);
+him("im adventurous", {t:'22:48'});
+him("im kind", {t:'22:48'});
+him("and youd never once be bored of me", {t:'22:48'});
+him("mostly because i know an unreasonable amount of useless facts", {t:'22:49'});
+me("thats a dangerous answer", {t:'22:49'});
+me("useless facts are unfortunately my one weakness", {t:'22:50'});
+him("good to know", {t:'22:50'});
+him("ill use that responsibly", {t:'22:51'});
+me("i dont believe you for a second", {t:'22:51'});
+him("you shouldnt", {t:'22:52'});
+pause(1000);
+me("fine. show me one", {t:'22:53'});
+typing(1300);
+him("a group of flamingos is called a flamboyance", {t:'22:54'});
+me("no", {t:'22:54'});
+me("thats not fair. you cant just open with flamboyance", {t:'22:54'});
+him("i did warn you i was dangerous", {t:'22:55'});
+me("i think ive made a terrible mistake", {t:'22:55'});
+him("too late. you asked for reasons", {t:'22:56'});
+me("keep going", {t:'22:56'});
+
+/* ---- the spell: a night that never ends ---- */
+pause(800);
+doodle(['✨','🌙','💜']);
+floodReset(430); ffloor(300); fdecay(0.985);
+fl('him',"another one. snails can sleep for years at a time");
+fl('me',"honestly a life goal");
+fl('him',"the moon drifts a little further from us every single year");
+fl('me',"rude of it");
+fl('him',"were basically doing the same thing right now. just slower");
+fl('me',"are you flirting with astronomy");
+fl('him',"im flirting with you. the astronomy is just a warmup");
+fl('me',"guess my favourite colour. if youre my soulmate youll know");
+fl('him',"purple. but the kind youre a little embarrassed to admit");
+fl('me',"okay get out of my head");
+fl('him',"cant. i moved in");
+fl('me',"are you paying rent");
+fl('him',"emotionally, constantly");
+fl('me',"fine, you can stay");
+div('Saturday');
+ffloor(66); fdecay(0.85); blur(0.7);
+doodle(['🌙','💜']);
+fl('him',"we should start a tiny country, you and me");
+fl('me',"whats the one law");
+fl('him',"no boring people allowed. compliments are the currency");
+fl('me',"then im already rich");
+fl('him',"filthy rich");
+fl('me',"say three more nice things and i legally become yours");
+blur(1.2);
+fl('him',"greedy");
+fl('me',"yes. continue");
+fl('him',"youre the most fun ive found on here by a long way");
+fl('me',"you say that to everyone?");
+fl('him',"no. most people never commit to the bit");
+fl('me',"weak");
+fl('him',"exactly. youre a different species");
+div('Sunday');
+ffloor(44); fdecay(0.9); blur(1.9);
+doodle(['🚗','✨']);
+fl('him',"i want to put you in a car and drive nowhere for hours");
+fl('me',"thats slightly unsafe");
+fl('me',"say more");
+fl('him',"dark roads. bad music. no destination");
+fl('me',"my favourite kind of trouble");
+fl('him',"ive been trying to make my flat feel like an actual home lately");
+fl('me',"hows that going");
+blur(2.5);
+fl('him',"slowly. mostly bare walls and good intentions");
+fl('me',"thats the whole trick though. the good intentions");
+fl('him',"see, this is the problem with you");
+fl('me',"whats the problem");
+fl('him',"i keep wanting to tell you things");
+doodle(['💜','🌙']);
+fl('him',"youre trouble");
+fl('me',"you started it");
+fl('him',"i absolutely did");
+fl('me',"at least you confess to your crimes");
+fl('him',"i should really sleep");
+fl('me',"same");
+fl('me',"so anyway");
+fl('him',"yeah exactly");
+
+div('Monday 01:16');
+ffloor(36); blur(3.2);
+fl('him',"i have to be awake in five hours and i hate it");
+fl('me',"awww");
+fl('him',"this is entirely your fault. youre too easy to talk to");
+fl('me',"take responsibility");
+fl('him',"i accept all charges");
+fl('me',"now tell me one more fact");
+fragFlash(["flamboyance","the moon drifts","purple. obviously","no boring people allowed","a car and no destination","bare walls and good intentions","i keep wanting to tell you things","i should really sleep","same","anyway","one more fact"]);
+pause(700);
+clear();
+
+/* ---- Monday morning: the friend ---- */
+F('online');
+div('Monday');
+me("okay i have a crush. on a stranger. from a screen. deeply stupid", {t:'09:14'});
+me("hes funny and its been like three days now", {t:'09:15'});
+me("i dont wanna have a crush on someone ive never even met", {t:'09:16'});
+typing(1300,'friend');
+fr("three days huh", {t:'09:22'});
+fr("go meet him before you marry the idea of him", {t:'09:23'});
+me("i dont wannaaa", {t:'09:24'});
+me("i already want the wedding and the imaginary kids", {t:'09:25'});
+fr("oh youre so far gone already", {t:'09:31'});
+pause(1000);
+clear();
+
+/* ============================================================
+   MONDAY  -  one glass of wine, and rain
+   ============================================================ */
+head('Him','','last seen 09:41','🌀');
+div('Monday');
+me("so youre free today right 👀", {t:'12:48'});
+him("gloriously free. nowhere to be", {t:'12:50'});
+me("then come here. one glass of wine. thats the whole plan ✨", {t:'13:03', live:true});
+typing(900);
+him("yeah. id actually really like that", {t:'13:04'});
+me("i only get an hour or two. around five?", {t:'13:07'});
+him("ill be there", {t:'13:08'});
+me("dont make me regret being spontaneous", {t:'13:17'});
+him("no promises", {t:'13:18'});
+pause(700);
+clear();
+
+/* Monday: friend, pre-date nerves */
+F('online');
+me("im meeting him in a few hours. the anxiety has arrived right on time", {t:'13:19'});
+typing(1200,'friend');
+fr("youre allowed to be nervous. youre also kind of unstoppable", {t:'13:20'});
+fr("go meet the actual person. he wont be the fantasy and thats the good part", {t:'13:21'});
+me("yeah. reality. reluctantly", {t:'13:22'});
+me("otherwise i keep falling for the version i invented", {t:'13:22'});
+fr("exactly. break the spell", {t:'13:25'});
+pause(900);
+clear();
+
+/* Monday: the rain */
+head('Him','','last seen 13:18','🌀');
+scene('rain');
+him("might be a little late, the rain has murdered the roads", {t:'16:39'});
+me("its fine. im getting soaked either way 🙃", {t:'16:52'});
+him("same. ill be the wet disaster by the door", {t:'17:18'});
+me("two minutes 👀", {t:'17:31'});
+pause(1500);
+clear();
+
+/* Monday night: friend, after the rain kiss */
+F('online');
+me("we kissed in the rain for an unreasonable amount of time", {t:'20:23'});
+me("im gone. completely gone", {t:'20:25'});
+typing(1100,'friend');
+fr("hahaha of course you are", {t:'20:51'});
+me("and now im being way too intense about it. i can feel myself doing it and i cant stop", {t:'20:58'});
+me("its not even me. its just the chemicals throwing a party", {t:'23:40'});
+typing(1300,'friend');
+fr("its okay if he feels it too", {t:'00:04'});
+fr("but this high over one evening is a flashing red light love", {t:'00:05'});
+pause(900);
+clear();
+
+/* Monday night: him, softer */
+head('Him','','online','🌀');
+me("wish id kissed you longer", {t:'20:41'});
+typing(1400);
+him("then come back and fix it", {t:'21:04'});
+him("i didnt want to leave", {t:'21:04'});
+me("it showed", {t:'21:05'});
+him("good. subtlety was never the goal", {t:'21:06'});
+pause(1400);
+him("we should run away for a night sometime", {t:'21:12'});
+me("define run away", {t:'21:12'});
+him("a car. the coast. no plan. slightly bad decisions", {t:'21:13'});
+me("my three favourite food groups", {t:'21:13'});
+him("i feel about seventeen right now", {t:'21:14'});
+me("good. lets go be reckless and wholesome about it", {t:'21:15'});
+scene('none');
+pause(1000);
+clear();
+
+/* ============================================================
+   TUESDAY  -  the coast
+   ============================================================ */
+F('online');
+div('Tuesday');
+me("seeing him again tonight 😭", {t:'18:17'});
+typing(1000,'friend');
+fr("two nights in a row. look at you", {t:'18:23'});
+me("this is too much too fast and im scared", {t:'18:24'});
+fr("go. carefully. have the whole thing", {t:'18:26'});
+pause(900);
+clear();
+
+head('Him','','online','🌀');
+me("so. tonight. the coast?", {t:'18:04'});
+him("i genuinely cannot wait that long but ill survive", {t:'18:14'});
+me("ill meet you where the road bends", {t:'19:11'});
+him("parked. tell me when youre out and ill roll up", {t:'21:04'});
+me("three minutes", {t:'21:07'});
+scene('road');
+pause(600);
+scene('sea');
+tjump(['21:08','22:20','23:41','00:55','01:48']);
+pause(700);
+clear();
+
+/* ============================================================
+   WEDNESDAY  -  the morning after, and the spiral
+   ============================================================ */
+F('online');
+div('Wednesday');
+me("last night was the sea and the whole sky and i think im in love 🌚", {t:'01:36'});
+me("(the morning dread came back right on schedule though)", {t:'08:24'});
+me("good morning. i have a crush, a stomachache and a full anxiety spiral", {t:'08:59'});
+me("i wasnt supposed to catch feelings. how do i put them back", {t:'09:00'});
+pause(900);
+me("hes been quiet a couple of hours and im already unravelling", {t:'15:11'});
+typing(1200,'friend');
+fr("okay breathe. youve survived this exact feeling before", {t:'15:11'});
+me("nothing about me feels survivable today", {t:'15:14'});
+fr("your brain is not on your side right now. dont believe everything it tells you", {t:'15:22'});
+fr("if he pulls away and you spent all day dreading it, you lived it twice", {t:'15:24'});
+fr("if he doesnt, you burned a whole day being scared for nothing", {t:'15:24'});
+me("youre doing the annoyingly wise thing again", {t:'15:25'});
+fr("let the thoughts pass like cars. you dont have to chase every one down the road", {t:'15:37'});
+me("okay. ill be an anxious little goblin for a week, sorry for using you as a diary", {t:'15:52'});
+fr("thats what im here for. take up the space", {t:'15:54'});
+pause(900);
+me("a shower and some distance helped. im choosing to be a person with standards, not one who begs", {t:'16:53'});
+me("if hes careless with that, thats his loss to make", {t:'16:54'});
+pause(900);
+clear();
+
+/* Wednesday: him, the admission */
+head('Him','','online','🌀');
+me("im going to end up with a real crush on you if we keep this up", {t:'09:18'});
+me("if thats allowed 🙈", {t:'09:18'});
+typing(1500);
+him("not sure youre ready for me at full volume 😏", {t:'09:54'});
+me("id happily wreck my whole week to find out", {t:'10:19'});
+him("careful. i might hold you to that 😋", {t:'10:35'});
+pause(800);
+me("any chance i could see you tonight?", {t:'14:22'});
+typing(1800);
+pause(1100);
+him("honestly im completely wrecked after this week", {t:'16:48'});
+him("i think i just need to crash tonight", {t:'16:49'});
+me("no yeah. totally fair", {t:'16:52'});
+pause(700);
+me("tomorrow then?", {t:'16:53'});
+typing(1300);
+him("tomorrow works", {t:'19:11'});
+pause(700);
+me("if you play your cards right maybe i stay over tomorrow", {t:'19:42'});
+him("if YOU play yours ill give you the good side of the bed 😏", {t:'19:57'});
+him("only catch is i have somewhere to be friday morning", {t:'19:57'});
+me("well figure it out. we always do 🙃", {t:'20:18'});
+pause(1000);
+clear();
+
+/* ============================================================
+   THURSDAY  -  his place, and the drive back at dawn
+   ============================================================ */
+F('online');
+div('Thursday');
+me("third time tonight. scared to say it out loud in case i jinx it 🥹", {t:'12:29'});
+typing(1000,'friend');
+fr("three nights. thats not nothing", {t:'12:30'});
+me("i know. i know", {t:'12:30'});
+fr("glad you found someone running at your speed for once", {t:'12:31'});
+pause(800);
+clear();
+
+head('Him','','online','🌀');
+me("what time are you stealing me tonight", {t:'15:06'});
+him("after dinner. ill come to you", {t:'15:42'});
+me("i made an effort. youre contractually required to notice", {t:'20:26'});
+him("on my way soon", {t:'20:31'});
+him("the map lied to me but im nearly there", {t:'21:11'});
+me("im coming out now", {t:'21:27'});
+pause(1700);
+clear();
+
+/* ============================================================
+   FRIDAY  -  the question, the wait, the answer
+   ============================================================ */
+act(3);
+
+/* Friday 5am: the friend, the dawn story */
+F('last seen 04:58');
+div('Friday');
+me("hi. its stupidly early and i have a whole story", {t:'05:03'});
+me("i was going to stay over. we even fell asleep around one", {t:'05:44'});
+me("then i woke up an hour later feeling awful. tried to wait it out, couldnt", {t:'05:45'});
+me("so i woke him and he drove me all the way home. forty minutes. at five in the morning", {t:'05:46'});
+me("he was so gentle about it. a sleepless night, for the worst possible reason 🤡", {t:'05:46'});
+typing(1600,'friend');
+fr("hes sweet. but slow it down love. let it earn the sleepovers", {t:'11:15'});
+me("i know. the crush threw all my rules out the window", {t:'11:21'});
+fr("three times is enough to feel where someones heading. and dont chase him today, he barely slept", {t:'11:24'});
+me("my gut says this either ends now, or it quietly slows down to the real him", {t:'11:52'});
+me("and if it ends, ill be okay. sad, but okay", {t:'11:53'});
+fr("thats the only reassurance that ever actually holds. your own", {t:'11:46'});
+pause(1100);
+clear();
+
+/* Friday: the ask, to him */
+head('Him','','last seen 11:02','🌀');
+me("thank you for driving me home. it really mattered", {t:'11:14'});
+him("of course. it was the right thing to do", {t:'12:28'});
+me("and thank you for the rest of it too 🙃", {t:'12:40'});
+pause(1000);
+draft("so are we doing this again or");
+draft("i had the best week i dont want to make it weird");
+me("would you want to see me again?", {t:'12:41', live:true});
+me("maybe without the sleepovers for a bit though 🥹", {t:'12:42', live:true});
+
+/* the wait */
+me("...", {t:'14:02', tiny:true});
+tjump(['14:06','14:48','15:21','15:50','16:09']);
+typing(2400);
+pause(900);
+typing(1500);
+him("hey. sorry. i was completely asleep for hours", {t:'16:25'});
+pause(1600);
+him("i really do appreciate you asking", {t:'16:25'});
+pause(1500);
+him("i just dont feel the romantic part of it", {t:'16:26'});
+pause(1600);
+him("and i dont want to lead you on", {t:'16:26', glitch:true});
+pause(2600);
+
+/* the raw fallout */
+draft("oh");
+draft("right. yeah. totally");
+me("thank you for being honest", {t:'16:34', live:true});
+pause(1000);
+me("can i ask one thing so i stop inventing reasons. was it only ever the chemistry, or did something change once we met", {t:'16:45', live:true});
+typing(1800);
+him("no, im actually looking for something real", {t:'16:53'});
+him("nothing changed. i think this is just how it goes sometimes 🤔", {t:'16:56', glitch:true});
+pause(2200);
+me("maybe its a me thing", {t:'17:16', live:true});
+pause(700);
+me("but now that its over i just feel a little played", {t:'17:16', live:true});
+pause(1500);
+me("it makes me sad. i felt something i hadnt felt in a long time", {t:'17:19', live:true});
+typing(2200);
+pause(1400);
+him("im really sorry it landed like that", {t:'17:44'});
+him("i never meant to play you. it honestly surprises me that it feels that way", {t:'17:44'});
+pause(2000);
+draft("but it does");
+draft("i feel so stupid for how much i liked you");
+me("i just wish id known none of it meant anything before we slept together", {t:'17:50', live:true});
+pause(800);
+me("so it couldve been my choice too", {t:'17:50', live:true});
+typing(1300);
+pause(1100);
+me("im going to stop here. its already too much", {t:'17:57', live:true});
+typing(1500);
+him("it wasnt supposed to mean nothing", {t:'18:06'});
+him("im sorry i made it feel that way", {t:'18:06'});
+pause(1300);
+me("how could it not. you just said you never felt it", {t:'18:09', live:true});
+typing(1300);
+him("i didnt say never", {t:'18:11'});
+me("then what changed", {t:'18:11', live:true, tiny:true});
+typing(2600);
+pause(1400);
+him("nothing changed", {t:'18:14'});
+him("i liked you from the start and wanted to see where it went", {t:'18:14'});
+him("it just didnt land where you wanted it to. thats all", {t:'18:14', glitch:true});
+pause(3000);
+clear();
+
+/* ============================================================
+   FRIDAY night  -  the friend, the kindest voice
+   ============================================================ */
+F('online');
+me("💔", {t:'16:27', tiny:true});
+me("ill be fine. right now i just want to lie on the floor for a while", {t:'16:36'});
+typing(1500,'friend');
+fr("oh love. im sorry. at least he told you plainly", {t:'16:38'});
+me("it was the whole thing meaning nothing again, wasnt it", {t:'16:50'});
+fr("or it was just far more of a story in your head than it ever was out here", {t:'16:52'});
+me("how do you act that warm and mean none of it", {t:'16:47'});
+fr("i dont think you were in love with him", {t:'18:20'});
+fr("i think you loved how he made you feel", {t:'18:20'});
+fr("and youre scared that feeling wont come back. it will. that kind of thing isnt rare", {t:'18:20'});
+me("i havent felt something mutual like that in years", {t:'18:22'});
+fr("okay but what was mutual. he replied fast, he was funny, you felt safe, you felt like yourself?", {t:'18:24'});
+me("yeah. all of it 😭", {t:'18:24'});
+fr("thats not a connection love. thats good chemistry", {t:'18:25'});
+fr("someone made you feel seen for a few days and it lit up everything. because being seen is the thing we all want", {t:'18:32'});
+me("it really was only a few days", {t:'18:33'});
+fr("youre a whole entire person. if someone walks away from that, sit with whose loss that actually is", {t:'18:38'});
+pause(1300);
+fr("feel all of it today. the world isnt ending over one boy", {t:'18:44'});
+me("is it okay if im a mess today", {t:'18:49'});
+typing(1400,'friend');
+fr("you dont need my permission to cry. just cry", {t:'18:52'});
+fr("take up all the room you need. im right here", {t:'18:53'});
+pause(2000);
+me("im deleting all of it. every trace. so i cant crawl back and reread it", {t:'20:01'});
+me("so i dont get to keep the evidence", {t:'20:01'});
+pause(2400);
+clear();
+
+/* finale */
+S.push({type:'finale'});
+
+/* ============================================================
+   RUNTIME
+   ============================================================ */
+function rowEl(cls){ const r=document.createElement('div'); r.className='row '+cls; return r; }
+
+function setHeader(name,theme,sub,ava){
+  header.className = theme||'';
+  hname.textContent = name;
+  hsub.textContent = sub||'';
+  hava.textContent = ava||'👤';
+}
+
+function addBubble(side, text, {stamp, cls='', tiny=false, glitch=false}={}){
+  const row = rowEl(side+(cls?' '+cls:''));
+  const b = document.createElement('div'); b.className='bub pop';
+  if(tiny){ b.style.fontSize='13px'; b.style.opacity='.85'; }
+  b.textContent = text;
+  if(glitch) b.dataset.glitch='1';
+  row.appendChild(b);
+  thread.appendChild(row);
+  if(stamp){
+    const s=document.createElement('div'); s.className='stamp'+(document.body.classList.contains('act3')?' hot':'');
+    s.textContent=stamp;
+    const wrap=document.createElement('div'); wrap.style.width='100%'; wrap.style.display='flex';
+    wrap.style.justifyContent = side==='me'?'flex-end':'flex-start';
+    wrap.appendChild(s); thread.appendChild(wrap);
+  }
+  scrollDown();
+  return row;
+}
+
+async function typeInField(text){
+  field.innerHTML='<span class="t"></span><span class="cur"></span><span class="blood-fill"></span>';
+  const t=field.querySelector('.t');
+  for(let i=0;i<text.length;i++){
+    if(dead) throw 'dead'; while(paused) await sleep(80);
+    t.textContent += text[i];
+    await sleep(48 + Math.random()*52 + (/[.,?]/.test(text[i])?190:0));
+  }
+}
+async function deleteField(){
+  const t=field.querySelector('.t'); if(!t) return;
+  while(t.textContent.length){
+    if(dead) throw 'dead'; while(paused) await sleep(80);
+    t.textContent = t.textContent.slice(0,-1);
+    await sleep(28 + Math.random()*24);
+  }
+  resetField();
+}
+function resetField(){ field.innerHTML='<span class="ph">Message</span><span class="blood-fill"></span>'; }
+
+async function showTyping(ms, who){
+  const cls = who==='friend'?'friend':'';
+  const row=rowEl('left typing'+(cls?' '+cls:''));
+  const b=document.createElement('div'); b.className='bub';
+  b.innerHTML='<span class="d"></span><span class="d"></span><span class="d"></span>';
+  row.appendChild(b); thread.appendChild(row); scrollDown();
+  hsub.textContent='typing…'; hsub.classList.add('typing-sub');
+  await wait(ms);
+  row.remove();
+  hsub.classList.remove('typing-sub'); hsub.textContent='online';
+}
+
+function spawnDoodles(list){
+  list.forEach((emo,i)=>{
+    setTimeout(()=>{
+      const d=document.createElement('div'); d.className='doodle'; d.textContent=emo;
+      d.style.left=(8+Math.random()*84)+'%';
+      d.style.bottom='-6%';
+      d.style.animationDuration=(3.2+Math.random()*2.2)+'s';
+      doodles.appendChild(d);
+      setTimeout(()=>d.remove(),6000);
+    }, i*180);
+  });
+}
+
+function setScene(name){
+  document.querySelectorAll('#scene .layer').forEach(l=>l.classList.remove('show'));
+  if(name && name!=='none'){
+    sceneWrap.classList.add('on');
+    const l=document.querySelector('.layer[data-sc="'+name+'"]');
+    if(l) l.classList.add('show');
+  } else sceneWrap.classList.remove('on');
+}
+
+async function timeJump(times){
+  for(const t of times){
+    clock.textContent = t;
+    await wait(document.body.classList.contains('act3')?780:560);
+  }
+}
+
+async function flashFragments(list){
+  thread.style.transition='filter .3s'; thread.style.filter='blur(1.8px)';
+  for(let k=0;k<list.length;k++){
+    const row=rowEl(Math.random()<.5?'me':'left');
+    const b=document.createElement('div'); b.className='bub'; b.style.opacity='.55';
+    b.textContent=list[k]; row.appendChild(b); thread.appendChild(row); scrollDown();
+    await wait(80);
+  }
+  await wait(240);
+}
+
+function clearThread(){ thread.innerHTML=''; thread.style.filter='none'; resetField(); setScene('none'); }
+
+async function step(s){
+  switch(s.type){
+    case 'header': setHeader(s.name,s.theme,s.sub,s.ava); await wait(500); break;
+    case 'divider':{
+      const d=document.createElement('div'); d.className='divider';
+      d.innerHTML='<span>'+s.label+'</span>'; thread.appendChild(d); scrollDown();
+      await wait(500); break;
+    }
+    case 'me':{
+      if(s.live && !s.instant){ await typeInField(s.text); await wait(320); resetField(); }
+      addBubble('me', s.text, {stamp:s.t, tiny:s.tiny});
+      try{ navigator.vibrate && navigator.vibrate(8);}catch(e){}
+      await wait(s.gap!=null?s.gap:(s.instant?230:640));
+      break;
+    }
+    case 'left':{
+      const cls = s.who==='friend'?'friend':'';
+      if(!s.instant){ await showTyping(Math.min(2400, 640 + s.text.length*22), s.who); }
+      addBubble('left', s.text, {stamp:s.t, cls, glitch:s.glitch});
+      try{ navigator.vibrate && navigator.vibrate(14);}catch(e){}
+      await wait(s.gap!=null?s.gap:(s.instant?230:800));
+      break;
+    }
+    case 'typing': await showTyping(s.ms, s.who); break;
+    case 'pause': await wait(s.ms); break;
+    case 'draft': await typeInField(s.text); await wait(s.hold||900); await deleteField(); await wait(480); break;
+    case 'clear': await wait(300); clearThread(); await wait(350); break;
+    case 'scene': setScene(s.name); await wait(400); break;
+    case 'act':
+      if(s.n===3){ document.body.classList.add('act3'); document.body.classList.add('dying'); }
+      break;
+    case 'timejump': await timeJump(s.times); break;
+    case 'fragments': await flashFragments(s.list); break;
+    case 'blur': thread.style.transition='filter .7s ease'; thread.style.filter = s.amount? ('blur('+s.amount+'px)') : 'none'; await wait(s.ms||0); break;
+    case 'doodle': spawnDoodles(s.list); break;
+    case 'finale': await finale(); break;
+  }
+}
+
+async function run(){
+  try{ for(const s of S){ if(dead) return; await step(s); } }
+  catch(e){ if(e!=='dead') console.error(e); }
+}
+
+/* ============================================================
+   FINALE  -  the screen cries, then she deletes it
+   ============================================================ */
+function recapDivider(label){ const d=document.createElement('div'); d.className='divider'; d.innerHTML='<span>'+label+'</span>'; thread.appendChild(d); }
+function injectRecap(){
+  thread.innerHTML='';
+  const r=[
+    ['div','Friday'],
+    ['me',"whats the three best reasons to date you",'22:47'],
+    ['him',"im adventurous",'22:48'],
+    ['him',"im kind",'22:48'],
+    ['him',"and youd never once be bored of me",'22:48'],
+    ['me',"useless facts are unfortunately my one weakness",'22:50'],
+    ['him',"a group of flamingos is called a flamboyance",'22:54'],
+    ['him',"i want to put you in a car and drive nowhere for hours",'23:20'],
+    ['div','Monday'],
+    ['me',"one glass of wine. thats the whole plan",'13:03'],
+    ['him',"ill be the wet disaster by the door",'17:18'],
+    ['me',"wish id kissed you longer",'20:41'],
+    ['him',"i didnt want to leave",'21:04'],
+    ['div','Tuesday'],
+    ['me',"three minutes",'21:07'],
+    ['div','Wednesday'],
+    ['me',"i think im in love",'01:36'],
+    ['me',"im going to end up with a real crush on you",'09:18'],
+    ['div','Thursday'],
+    ['me',"i made an effort. youre required to notice",'20:26'],
+    ['me',"im coming out now",'21:27'],
+    ['div','Friday'],
+    ['me',"would you want to see me again?",'12:41'],
+    ['him',"i just dont feel the romantic part of it",'16:26'],
+    ['him',"i dont want to lead you on",'16:26'],
+    ['me',"it makes me sad. i felt something i hadnt felt in a long time",'17:19'],
+    ['him',"it just didnt land where you wanted it to. thats all",'18:14'],
+  ];
+  for(const it of r){
+    if(it[0]==='div') recapDivider(it[1]);
+    else { const row=addBubble(it[0]==='me'?'me':'left', it[1], {stamp:it[2]}); row.querySelector('.bub').classList.remove('pop'); }
+  }
+  scrollDown();
+}
+
+function bleedFrom(elem, len){
+  if(!elem) return;
+  const r=elem.getBoundingClientRect(), p=$('#phone').getBoundingClientRect();
+  const t=document.createElement('div'); t.className='tear run';
+  t.style.left=(r.left-p.left + r.width/2)+'px';
+  t.style.top=(r.top-p.top + r.height-2)+'px';
+  t.style.setProperty('--th',(len||140)+'px');
+  t.style.setProperty('--td',(2.2+Math.random()*1.2)+'s');
+  t.innerHTML='<span class="drop"></span>';
+  $('#phone').appendChild(t);
+}
+
+async function deleteDialogue(){
+  const kids=[...thread.children].reverse();
+  for(const k of kids){
+    if(dead) return;
+    k.style.transition='opacity .26s ease, transform .26s ease, filter .26s ease';
+    k.style.opacity='0'; k.style.transform='translateX(-14px)'; k.style.filter='blur(1px)';
+    await wait(55);
+    k.remove();
+  }
+}
+
+async function finale(){
+  resetField();
+  setHeader('Him','','last seen 18:14','🌀');
+  injectRecap();
+  await wait(700);
+  document.body.classList.add('bleeding');
+  await wait(900);
+
+  const row=rowEl('left typing');
+  const b=document.createElement('div'); b.className='bub'; b.style.background='#2a1014';
+  b.innerHTML='<span class="d" style="background:#b3121f"></span><span class="d" style="background:#b3121f"></span><span class="d" style="background:#b3121f"></span>';
+  row.appendChild(b); thread.appendChild(row); scrollDown();
+  await wait(1900);
+  b.querySelectorAll('.d').forEach((d,i)=>{
+    const r=b.getBoundingClientRect(), p=$('#phone').getBoundingClientRect();
+    const t=document.createElement('div'); t.className='tear run';
+    t.style.left=(r.left-p.left + 16 + i*11)+'px';
+    t.style.top=(r.top-p.top + 18)+'px';
+    t.style.setProperty('--th', (40+Math.random()*60)+'px');
+    t.style.setProperty('--td', (1.6+Math.random())+'s');
+    t.innerHTML='<span class="drop"></span>';
+    $('#phone').appendChild(t);
+  });
+  await wait(1300);
+
+  document.querySelector('#field .blood-fill').style.width='100%';
+  await wait(1400);
+  bleedFrom($('#send'), 220);
+  await wait(800);
+
+  const ghosts=[
+    "youd never once be bored of me",
+    "a group of flamingos is called a flamboyance",
+    "guess my favourite colour",
+    "one glass of wine, thats the whole plan",
+    "ill be the wet disaster by the door",
+    "i didnt want to leave",
+    "a car, the coast, no plan",
+    "im going to end up with a real crush on you",
+    "more of a story in your head",
+    "just how it goes sometimes",
+  ];
+  const gl=$('#ghosts');
+  for(let i=0;i<ghosts.length;i++){
+    if(dead) return;
+    const g=document.createElement('div'); g.className='ghost flick'; g.textContent=ghosts[i];
+    g.style.top=(12+(i*8)%74)+'%';
+    gl.appendChild(g); setTimeout(()=>g.remove(),900);
+    await wait(380);
+  }
+  await wait(600);
+  $('#crack').classList.add('on');
+  await wait(1400);
+
+  $('#crack').style.transition='opacity 2.2s'; $('#crack').classList.remove('on');
+  document.querySelector('#field .blood-fill').style.transition='width 1.8s ease';
+  document.querySelector('#field .blood-fill').style.width='0%';
+  await wait(500);
+  await deleteDialogue();
+  document.querySelectorAll('.tear').forEach(t=>{ t.style.transition='opacity 1.2s'; t.style.opacity='0'; });
+  await wait(1200);
+  hsub.textContent='';
+  await wait(1600);
+
+  const end=$('#endcard'); end.classList.add('on');
+  await wait(2200);
+  end.classList.add('show-replay');
+}
+
+/* ---- start ---- */
+$('#start').addEventListener('click', function once(){
+  $('#start').classList.add('hide');
+  try{ navigator.vibrate && navigator.vibrate(20);}catch(e){}
+  setTimeout(run, 700);
+  $('#start').removeEventListener('click', once);
+}, {once:true});
+
+$('#replay').addEventListener('click', ()=>location.reload());
+</script>
+</body>
+</html>
